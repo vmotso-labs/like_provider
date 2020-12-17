@@ -25,8 +25,8 @@ jobs:
         if: always()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          repo: vmotso-labs/like_fatmouse
-          sha: b1ceeb7bfba55dd5796dc4adb28da6e8feac6a81
+          # repo: vmotso-labs/like_fatmouse
+          # sha: b1ceeb7bfba55dd5796dc4adb28da6e8feac6a81
           name: from_downstream 
           conclusion: ${{ job.status }}
           output: |

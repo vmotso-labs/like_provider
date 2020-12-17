@@ -24,7 +24,7 @@ jobs:
         uses: LouisBrunner/checks-action@v1.1.1
         if: always()
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.ACCESS_TOKEN }}
           repo: vmotso-labs/like_fatmouse
           sha: b1ceeb7bfba55dd5796dc4adb28da6e8feac6a81
           name: from_downstream 

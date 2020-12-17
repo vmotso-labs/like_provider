@@ -5,18 +5,14 @@ on:
   repository_dispatch:
 
 jobs:
-  create_check:
+  downstream:
     runs-on: ubuntu-latest
-
-  say_hello:
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: qw
         if: github.event.action == 'upstream_push'
         run: |
-          curl -u vmotso:$GITHUB_TOKEN \
+          echo "Create check-runs for the upstream"
+          curl -u ${{ secrets.GITHUB_TOKEN }} \
           -X POST \
           -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/vmotso-test-org/like_fatmouse/check-runs \

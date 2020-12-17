@@ -5,8 +5,22 @@ on:
   repository_dispatch:
 
 jobs:
+  create_check:
+    runs-on: ubuntu-latest
+
   say_hello:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - run: |
-          echo "Fatmouse branch: ${{ github.event.client_payload.repository }}"
+      - name: qw
+        if: github.event.action == 'upstream_push'
+        run: |
+          curl -u vmotso:$GITHUB_TOKEN \
+          -X POST \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/vmotso-test-org/like_fatmouse/check-runs \
+          -d '{"name":"test","head_sha":"b1ceeb7bfba55dd5796dc4adb28da6e8feac6a81"}'
+      - name: Verify event
+        run: |
+          echo "Fatmouse branch: ${{ github.event.client_payload.branch }}"

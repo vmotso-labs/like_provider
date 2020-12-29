@@ -11,6 +11,9 @@ on:
         default: "master"
 jobs:
   acc-tests:
+    env:
+      API_BRANCH: ${{ github.event.inputs.api_branch }}
+      DB_BRANCH: ${{ github.event.inputs.db_branch }}
     runs-on: ubuntu-latest
     name: acc-tests
     steps:
@@ -18,14 +21,13 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: "1.13"
-      - name: Environment settings
-        env:
-          API_BRANCH: ${{ github.event.inputs.api_branch }}
-          DB_BRANCH: ${{ github.event.inputs.db_branch }}
       - name: Run acceptance tests
         env:
           SCALR_HOSTNAME: ${{ steps.create.outputs.hostname }}
-        run: echo "Acceptance tests"
+        run: |
+          echo "Acceptance tests"
+          printenv
+
 # run: |
 #   echo "Create check-runs for the upstream"
 #   curl -u ${{ secrets.GITHUB_TOKEN }} \

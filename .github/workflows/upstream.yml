@@ -1,20 +1,43 @@
-name: Manually triggered workflow
+name: Workflow triggered by upstream
 on:
   workflow_dispatch:
     inputs:
-      name:
-        description: 'Person to greet'
+      api_branch:
+        description: "API Branch"
         required: true
-        default: 'Mona the Octocat'
-      home:
-        description: 'location'
+      db_branch:
+        description: "DB Branch"
         required: false
-        default: 'The Octoverse'
-
+        default: "master"
 jobs:
-  say_hello:
+  acc-tests:
     runs-on: ubuntu-latest
+    name: acc-tests
     steps:
-    - run: |
-        echo "Hello ${{ github.event.inputs.name }}!"
-        echo "- in ${{ github.event.inputs.home }}!"
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "1.13"
+      - name: Environment settings
+        env:
+          API_BRANCH: ${{ github.event.inputs.api_branch }}
+          DB_BRANCH: ${{ github.event.inputs.db_branch }}
+      - name: Create container
+        id: create
+        uses: Scalr/gh-action-revizor@master
+        with:
+          command: create
+      - name: Run acceptance tests
+        env:
+          SCALR_HOSTNAME: ${{ steps.create.outputs.hostname }}
+        run: echo "Acceptance tests"
+
+#- name: Setup upstream
+  # if: github.event.action == 'upstream_push'
+  # run: |
+  #   echo "Create check-runs for the upstream"
+  #   curl -u ${{ secrets.GITHUB_TOKEN }} \
+  #   -X POST \
+  #   -H "Accept: application/vnd.github.v3+json" \
+  #   https://api.github.com/repos/vmotso-labs/like_fatmouse/check-runs \
+  #   -d '{"name":"test","head_sha":"b1ceeb7bfba55dd5796dc4adb28da6e8feac6a81"}'

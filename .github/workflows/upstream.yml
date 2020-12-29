@@ -9,11 +9,15 @@ on:
         description: "DB Branch"
         required: false
         default: "master"
+      upstream_sha:
+        description: "DB Branch"
+        required: true
 jobs:
   acc-tests:
     env:
       API_BRANCH: ${{ github.event.inputs.api_branch }}
       DB_BRANCH: ${{ github.event.inputs.db_branch }}
+      UPSTREAM_SHA: ${{ github.event.inputs.upstream_sha }}
     runs-on: ubuntu-latest
     name: acc-tests
     steps:
@@ -22,16 +26,11 @@ jobs:
         with:
           go-version: "1.13"
       - name: Run acceptance tests
-        env:
-          SCALR_HOSTNAME: ${{ steps.create.outputs.hostname }}
         run: |
           echo "Acceptance tests"
-          printenv
-
-# run: |
-#   echo "Create check-runs for the upstream"
-#   curl -u ${{ secrets.GITHUB_TOKEN }} \
-#   -X POST \
-#   -H "Accept: application/vnd.github.v3+json" \
-#   https://api.github.com/repos/vmotso-labs/like_fatmouse/check-runs \
-#   -d '{"name":"test","head_sha":"b1ceeb7bfba55dd5796dc4adb28da6e8feac6a81"}'
+      - name: Notify upstream aboute failure
+        if: ${{ success() }}
+        run: ./notify_upstream.sh success
+      - name: Notify upstream aboute failure
+        if: ${{ failure() }}
+        run: ./notify_upstream.sh failure

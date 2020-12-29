@@ -28,7 +28,7 @@ jobs:
       - name: Run acceptance tests
         run: |
           echo "Acceptance tests"
-      - name: Notify upstream aboute failure
+      - name: Notify upstream aboute success
         if: ${{ success() }}
         run: ./notify_upstream.sh success
       - name: Notify upstream aboute failure

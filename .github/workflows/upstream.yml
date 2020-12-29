@@ -29,6 +29,7 @@ jobs:
       - name: Run acceptance tests
         run: |
           echo "Acceptance tests"
+          sleep 60
       - name: Notify upstream aboute success
         if: ${{ success() }}
         run: ./notify_upstream.sh success

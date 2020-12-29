@@ -5,7 +5,7 @@ on:
   repository_dispatch:
 
 jobs:
-  downstream:
+  default:
     runs-on: ubuntu-latest
     steps:
       - name: acc tests

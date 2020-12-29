@@ -18,6 +18,7 @@ jobs:
       API_BRANCH: ${{ github.event.inputs.api_branch }}
       DB_BRANCH: ${{ github.event.inputs.db_branch }}
       UPSTREAM_SHA: ${{ github.event.inputs.upstream_sha }}
+      ORG_ADMIN_TOKEN: ${{ secrets.ORG_ADMIN_TOKEN }}
     runs-on: ubuntu-latest
     name: acc-tests
     steps:
